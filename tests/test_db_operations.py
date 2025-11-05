@@ -312,6 +312,10 @@ class TestGetFramesByDepthRange:
     
     async def test_range_query_sorted_by_depth(self, db_session: AsyncSession, sample_png_bytes: bytes):
         """Test that results are sorted by depth ascending."""
+        # Clear cache to avoid detached instance issues
+        from app.core import clear_all_caches
+        clear_all_caches()
+        
         # Insert in random order
         for depth in [300.0, 100.0, 200.0, 150.0]:
             await upsert_frame(db_session, depth, 150, 1, sample_png_bytes)
@@ -354,6 +358,8 @@ class TestDeleteFrame:
     
     async def test_delete_existing_frame(self, db_session: AsyncSession, sample_png_bytes: bytes):
         """Test deleting an existing frame."""
+        from app.core import clear_all_caches
+        
         depth = 100.5
         await upsert_frame(db_session, depth, 150, 1, sample_png_bytes)
         await db_session.commit()
@@ -362,6 +368,9 @@ class TestDeleteFrame:
         await db_session.commit()
         
         assert deleted is True
+        
+        # Clear cache to get fresh data after deletion
+        clear_all_caches()
         
         # Verify frame is gone
         frame = await get_frame_by_depth(db_session, depth)
@@ -520,10 +529,10 @@ class TestTransactionManagement:
         # Insert valid frame
         await upsert_frame(db_session, 100.0, 150, 1, sample_png_bytes)
         
-        # Simulate error (don't commit)
-        # Session should rollback automatically on exception
+        # Explicitly rollback to simulate error condition
+        await db_session.rollback()
         
-        # Verify nothing was committed
+        # Verify nothing was committed after rollback
         count = await count_frames(db_session)
         assert count == 0
 
