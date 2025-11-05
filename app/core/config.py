@@ -64,6 +64,12 @@ class Settings(BaseSettings):
     chunk_size: int = Field(
         default=500, ge=1, le=10000, description="Batch size for CSV processing"
     )
+    
+    # Security settings
+    admin_token: str = Field(
+        default="change-me-in-production",
+        description="Admin token for secured endpoints (e.g., /frames/reload)",
+    )
 
     @field_validator("database_url")
     @classmethod
