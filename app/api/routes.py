@@ -24,7 +24,7 @@ from app.api.models import (
     ReloadResponse,
     ErrorResponse,
 )
-from app.core import get_logger, settings
+from app.core import get_logger, settings, get_cache_stats, clear_all_caches
 from app.db import get_db, Frame
 from app.db.operations import (
     get_frames_by_depth_range,
@@ -388,6 +388,10 @@ async def reload_frames(
         
         duration = time.time() - start_time
         
+        # Clear caches after successful ingestion to ensure fresh data
+        clear_all_caches()
+        logger.info("Caches cleared after successful reload")
+        
         # Check if ingestion was successful
         if result["rows_processed"] == result["frames_upserted"]:
             status_str = "success"
@@ -426,3 +430,152 @@ async def reload_frames(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Reload failed: {str(e)}",
         )
+
+
+@router.get(
+    "/cache/stats",
+    summary="Get cache statistics",
+    description="""
+    Returns performance statistics for the frame and range caches.
+    
+    Useful for monitoring cache effectiveness and tuning cache parameters.
+    Statistics include hit rates, evictions, and current cache sizes.
+    """,
+    response_description="Cache statistics including hit rates and sizes",
+    tags=["monitoring"],
+)
+async def get_cache_statistics():
+    """
+    Retrieve cache performance statistics.
+    
+    Returns detailed metrics for both the frame cache (single depth lookups)
+    and the range cache (depth range queries).
+    
+    Returns:
+        dict: Cache statistics including:
+            - frame_cache: Stats for single frame lookups
+              - hits: Number of cache hits
+              - misses: Number of cache misses
+              - hit_rate: Hit rate as percentage (0.0-100.0)
+              - size: Current number of cached entries
+              - evictions: Number of LRU evictions
+              - expirations: Number of TTL expirations
+            - range_cache: Stats for range queries (same structure)
+            - total_requests: Combined hits + misses across both caches
+            - overall_hit_rate: Combined hit rate across both caches
+    
+    Example Response:
+        {
+            "frame_cache": {
+                "hits": 1523,
+                "misses": 421,
+                "hit_rate": 78.3,
+                "size": 850,
+                "evictions": 12,
+                "expirations": 45
+            },
+            "range_cache": {
+                "hits": 234,
+                "misses": 87,
+                "hit_rate": 72.9,
+                "size": 65,
+                "evictions": 3,
+                "expirations": 15
+            },
+            "total_requests": 2265,
+            "overall_hit_rate": 77.6
+        }
+    """
+    stats = get_cache_stats()
+    
+    # Calculate overall statistics
+    total_hits = stats["frame_cache"]["hits"] + stats["range_cache"]["hits"]
+    total_misses = stats["frame_cache"]["misses"] + stats["range_cache"]["misses"]
+    total_requests = total_hits + total_misses
+    
+    overall_hit_rate = (
+        (total_hits / total_requests * 100) if total_requests > 0 else 0.0
+    )
+    
+    return {
+        **stats,
+        "total_requests": total_requests,
+        "overall_hit_rate": round(overall_hit_rate, 1),
+    }
+
+
+@router.delete(
+    "/cache",
+    summary="Clear all caches",
+    description="""
+    Clears all cached data from both frame and range caches.
+    
+    Requires admin authentication via X-Admin-Token header.
+    Useful after POST /frames/reload to ensure fresh data is served.
+    """,
+    response_description="Cache clear confirmation",
+    tags=["monitoring"],
+    responses={
+        status.HTTP_401_UNAUTHORIZED: {
+            "model": ErrorResponse,
+            "description": "Invalid or missing admin token",
+        },
+    },
+)
+async def clear_caches(
+    x_admin_token: Optional[str] = Header(None, description="Admin API token"),
+):
+    """
+    Clear all caches (requires admin authentication).
+    
+    This endpoint forces all subsequent requests to hit the database,
+    ensuring fresh data is returned. Useful after re-ingestion or
+    when debugging cache-related issues.
+    
+    Args:
+        x_admin_token: Admin token from request header
+    
+    Returns:
+        dict: Confirmation with pre-clear cache sizes
+    
+    Raises:
+        HTTPException: 401 if token is invalid or missing
+    
+    Example Response:
+        {
+            "status": "cleared",
+            "message": "All caches cleared successfully",
+            "previous_sizes": {
+                "frame_cache": 850,
+                "range_cache": 65
+            }
+        }
+    """
+    # Verify admin token
+    if not x_admin_token or x_admin_token != settings.admin_token:
+        logger.warning("Cache clear attempt with invalid token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or missing admin token",
+        )
+    
+    # Get stats before clearing
+    stats = get_cache_stats()
+    previous_sizes = {
+        "frame_cache": stats["frame_cache"]["size"],
+        "range_cache": stats["range_cache"]["size"],
+    }
+    
+    # Clear all caches
+    clear_all_caches()
+    
+    logger.info(
+        "Caches cleared by admin",
+        extra={"previous_sizes": previous_sizes},
+    )
+    
+    return {
+        "status": "cleared",
+        "message": "All caches cleared successfully",
+        "previous_sizes": previous_sizes,
+    }

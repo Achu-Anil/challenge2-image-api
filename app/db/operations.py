@@ -11,7 +11,7 @@ from sqlalchemy import select, func, and_
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core import get_logger
+from app.core import get_logger, cache_frame, cache_range
 from app.db.models import Frame
 
 logger = get_logger(__name__)
@@ -151,6 +151,7 @@ async def upsert_frames_batch(
     return len(frames)
 
 
+@cache_frame(ttl_seconds=60)
 async def get_frame_by_depth(
     session: AsyncSession,
     depth: float,
@@ -177,6 +178,7 @@ async def get_frame_by_depth(
     return result.scalar_one_or_none()
 
 
+@cache_range(ttl_seconds=60)
 async def get_frames_by_depth_range(
     session: AsyncSession,
     depth_min: Optional[float] = None,
