@@ -68,6 +68,3 @@ poetry.lock
 # Docker
 .dockerignore
 
-# Ignore all Markdown files
-*.md
-
