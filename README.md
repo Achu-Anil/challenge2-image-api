@@ -1,31 +1,37 @@
-# 🎨 Depth Frames API
+# 🎨 AIQ Depth Frames API
 
-> A production-ready Python FastAPI application for processing depth-keyed grayscale image frames with custom colorization.
+> **Production-Ready Image Processing & API Service**  
+> A Python FastAPI application for processing depth-keyed grayscale image frames with custom colorization and intelligent caching.
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
 [![Tests](https://img.shields.io/badge/tests-133%20passing-brightgreen.svg)](./tests/)
 [![Coverage](https://img.shields.io/badge/coverage-86%25-yellow.svg)](./htmlcov/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](./Dockerfile)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ---
 
 ## 📖 Table of Contents
 
-- [Overview](#-overview)
-- [Features](#-features)
-- [Quick Start](#-quick-start)
+- [🚀 Overview](#-overview)
+- [✨ Features](#-features)
+- [🏃 Quick Start](#-quick-start)
   - [Docker (Recommended)](#docker-recommended)
   - [Local Development](#local-development)
-- [Data Ingestion](#-data-ingestion)
-- [API Usage](#-api-usage)
-- [Project Structure](#-project-structure)
-- [Configuration](#-configuration)
-- [Testing](#-testing)
-- [Performance](#-performance)
-- [Assumptions](#-assumptions)
-- [Extensibility](#-extensibility)
-- [Troubleshooting](#-troubleshooting)
+- [📥 Data Ingestion](#-data-ingestion)
+- [🌐 API Usage](#-api-usage)
+- [📂 Project Structure](#-project-structure)
+- [⚙️ Configuration](#-configuration)
+- [🧪 Testing](#-testing)
+- [⚡ Performance](#-performance)
+- [📋 Assumptions & Design Decisions](#-assumptions)
+- [🔮 Extensibility](#-extensibility)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📚 Additional Documentation](#-additional-documentation)
+- [👨‍💻 Development](#-development)
+- [📝 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
 
 ---
 
@@ -731,7 +737,9 @@ docker compose exec api python -m http.server 8080 --directory htmlcov
 
 ---
 
-## 📋 Assumptions
+## 📋 Assumptions & Design Decisions
+
+This section documents key assumptions and design choices made during development to provide clarity and context for future maintainers.
 
 ### Data Format
 
@@ -1349,11 +1357,42 @@ Built with:
 
 ---
 
-**🚀 Ready to process some frames? Get started with [Docker](#docker-recommended) or [local development](#local-development)!**
+## 🚀 Getting Started
+
+Ready to process some frames? Choose your preferred method:
+
+- **[Quick Start with Docker](#docker-recommended)** - One command deployment
+- **[Local Development Setup](#local-development)** - Full development environment
+- **[API Documentation](http://localhost:8000/docs)** - Interactive Swagger UI (after starting the server)
+
+For deployment guidance, see [DEPLOYMENT.md](./DEPLOYMENT.md) and [DOCKER.md](./DOCKER.md).
 
 ---
 
-**Last Updated:** 2025-11-06  
-**Version:** 0.1.0  
-**Python:** 3.11+  
-**Status:** ✅ Production Ready
+## 📞 Support & Contributing
+
+This project was developed as part of the AIQ Backend Engineer technical assessment. It demonstrates production-ready API design, comprehensive testing, Docker containerization, and adherence to software engineering best practices.
+
+### Questions or Issues?
+
+1. Check the [Troubleshooting](#-troubleshooting) section
+2. Review the [Additional Documentation](#-additional-documentation)
+3. Enable [debug logging](#getting-help) for detailed diagnostics
+
+### Repository Information
+
+- **GitHub:** [https://github.com/Achu-Anil/aiq-depth-frames-api](https://github.com/Achu-Anil/aiq-depth-frames-api)
+- **Last Updated:** November 6, 2025
+- **Version:** 0.1.0
+- **Python Version:** 3.11+
+- **Status:** ✅ Production Ready
+
+---
+
+<div align="center">
+
+**Built with ❤️ for the AIQ Backend Engineer Assignment**
+
+_Demonstrating professional software engineering practices, clean architecture, and production-ready code._
+
+</div>
