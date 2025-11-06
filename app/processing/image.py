@@ -196,8 +196,8 @@ def resize_gray_width(
     if width == new_width:
         return gray_2d_uint8
 
-    # Convert to PIL Image (mode 'L' = 8-bit grayscale)
-    img = Image.fromarray(gray_2d_uint8, mode="L")
+    # Convert to PIL Image (PIL infers mode='L' from uint8 2D array)
+    img = Image.fromarray(gray_2d_uint8)
 
     # Resize using specified resampling method
     resized_img = img.resize((new_width, height), resample)
@@ -257,8 +257,8 @@ def encode_to_png(rgb_array: NDArray[np.uint8]) -> bytes:
         >>> len(png_bytes) > 0
         True
     """
-    # Create PIL Image from RGB array
-    img = Image.fromarray(rgb_array, mode="RGB")
+    # Create PIL Image from RGB array (PIL infers mode='RGB' from uint8 3D array with shape[2]==3)
+    img = Image.fromarray(rgb_array)
 
     # Encode to PNG in memory
     buffer = BytesIO()
