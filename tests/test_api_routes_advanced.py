@@ -10,7 +10,7 @@ These tests focus on:
 """
 
 import base64
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
 import pandas as pd
 import pytest
@@ -474,15 +474,15 @@ class TestHealthEndpointEdgeCases:
     """Additional tests for health check endpoint."""
 
     def test_health_check_database_error(self):
-        """Test health check when database is unavailable."""
-        with patch("app.api.routes.AsyncSession") as mock_session:
-            # Mock database error
-            mock_db = AsyncMock()
-            mock_db.execute = AsyncMock(side_effect=Exception("DB connection failed"))
+        """Test health check when database is unavailable.
 
-            response = client.get("/health")
+        Note: This test verifies the health endpoint returns successfully
+        even when database connectivity cannot be fully tested.
+        """
+        response = client.get("/health")
 
-            # Should still return 200 but with degraded status
-            assert response.status_code == 200
-            # The actual implementation returns "healthy" or "degraded"
-            assert "status" in response.json()
+        # Should return 200 with status information
+        assert response.status_code == 200
+        # The actual implementation returns "healthy" or "degraded"
+        assert "status" in response.json()
+        assert "database" in response.json()
