@@ -117,6 +117,59 @@ app = FastAPI(
 )
 
 # ============================================================================
+# Exception Handlers
+# ============================================================================
+from fastapi import HTTPException, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from app.api.models import ErrorResponse
+from app.core import get_request_id
+from datetime import datetime, timezone
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc: HTTPException):
+    """Handle HTTP exceptions with consistent error response format."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=ErrorResponse(
+            error=exc.__class__.__name__,
+            detail=str(exc.detail),
+            error_code=f"HTTP_{exc.status_code}",
+            request_id=get_request_id(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
+        ).model_dump(),
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc: RequestValidationError):
+    """Handle request validation errors from Pydantic."""
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content=ErrorResponse(
+            error="ValidationError",
+            detail=str(exc.errors()),
+            error_code="VALIDATION_ERROR",
+            request_id=get_request_id(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
+        ).model_dump(),
+    )
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request, exc: Exception):
+    """Handle any uncaught exceptions with structured error response."""
+    logger.exception("Unhandled exception", exc_info=exc)
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content=ErrorResponse(
+            error=exc.__class__.__name__,
+            detail="An unexpected error occurred. Please check logs with request_id for details.",
+            error_code="INTERNAL_ERROR",
+            request_id=get_request_id(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
+        ).model_dump(),
+    )
+
+# ============================================================================
 # Middleware Stack
 # ============================================================================
 # Add middleware for request ID tracking

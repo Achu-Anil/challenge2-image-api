@@ -273,12 +273,16 @@ async def ingest_csv(
         target_width: Target image width (default 150)
     
     Returns:
-        dict: Ingestion summary with stats
+        dict: Ingestion summary with stats including performance metrics
     
     Example:
         >>> result = await ingest_csv("data/frames.csv", chunk_size=100)
-        >>> print(f"Processed {result['rows_processed']} rows")
+        >>> print(f"Processed {result['rows_processed']} rows in {result['duration_seconds']:.2f}s")
+        >>> print(f"Throughput: {result['rows_per_second']:.0f} rows/sec")
     """
+    import time
+    start_time = time.time()
+    
     # Use settings defaults if not provided
     csv_path = Path(csv_path or settings.csv_file_path)
     chunk_size = chunk_size or settings.chunk_size
@@ -304,12 +308,16 @@ async def ingest_csv(
             f"got {csv_info['num_cols']}"
         )
     
-    # Step 2: Process chunks
+    # Step 2: Process chunks with performance tracking
     total_rows = 0
     total_frames = 0
+    chunk_count = 0
     
     async with get_db_context() as db:
         for chunk_df in read_csv_chunks(csv_path, chunk_size):
+            chunk_count += 1
+            chunk_start = time.time()
+            
             # Process chunk to frames
             frames = await process_chunk_to_frames(
                 chunk_df,
@@ -322,14 +330,35 @@ async def ingest_csv(
             
             total_rows += len(chunk_df)
             total_frames += upserted
+            
+            # Log progress periodically (every 10 chunks)
+            if chunk_count % 10 == 0:
+                elapsed = time.time() - start_time
+                rows_per_sec = total_rows / elapsed if elapsed > 0 else 0
+                logger.info(
+                    f"Ingestion progress: {total_rows} rows processed",
+                    extra={
+                        "rows_processed": total_rows,
+                        "chunks_processed": chunk_count,
+                        "rows_per_second": round(rows_per_sec, 1),
+                        "elapsed_seconds": round(elapsed, 2),
+                    }
+                )
+    
+    # Calculate final metrics
+    duration = time.time() - start_time
+    rows_per_second = total_rows / duration if duration > 0 else 0
     
     result = {
         "csv_path": str(csv_path),
         "rows_processed": total_rows,
         "frames_upserted": total_frames,
         "chunk_size": chunk_size,
+        "chunks_processed": chunk_count,
         "source_width": source_width,
         "target_width": target_width,
+        "duration_seconds": round(duration, 2),
+        "rows_per_second": round(rows_per_second, 1),
     }
     
     logger.info(

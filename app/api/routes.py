@@ -579,3 +579,97 @@ async def clear_caches(
         "message": "All caches cleared successfully",
         "previous_sizes": previous_sizes,
     }
+
+
+@router.get(
+    "/metrics",
+    summary="Get application metrics",
+    description="""
+    Returns comprehensive application metrics including:
+    - Database statistics (total frames, depth range)
+    - Cache performance metrics
+    - API request statistics
+    
+    Useful for monitoring, alerting, and capacity planning.
+    Compatible with Prometheus scraping format.
+    """,
+    response_description="Application metrics",
+    tags=["monitoring"],
+)
+async def get_metrics(db: AsyncSession = Depends(get_db)):
+    """
+    Get comprehensive application metrics.
+    
+    Provides insight into:
+    - Total frames stored
+    - Depth range (min/max)
+    - Cache hit rates
+    - Performance statistics
+    
+    Args:
+        db: Database session (injected)
+    
+    Returns:
+        dict: Application metrics
+    
+    Example Response:
+        {
+            "database": {
+                "total_frames": 1500,
+                "depth_min": 100.5,
+                "depth_max": 2500.75
+            },
+            "cache": {
+                "frame_cache": {
+                    "hit_rate_percent": 85.3,
+                    "size": 850,
+                    "max_size": 1000
+                },
+                "range_cache": {
+                    "hit_rate_percent": 72.1,
+                    "size": 45,
+                    "max_size": 100
+                }
+            },
+            "application": {
+                "name": "ImageFramesAPI",
+                "version": "0.1.0",
+                "environment": "production"
+            }
+        }
+    """
+    # Get database metrics
+    total_frames = await count_frames(db)
+    depth_min, depth_max = await get_depth_range(db)
+    
+    # Get cache metrics
+    cache_stats = get_cache_stats()
+    
+    return {
+        "database": {
+            "total_frames": total_frames,
+            "depth_min": depth_min,
+            "depth_max": depth_max,
+        },
+        "cache": {
+            "frame_cache": {
+                "hit_rate_percent": cache_stats["frame_cache"]["hit_rate_percent"],
+                "size": cache_stats["frame_cache"]["size"],
+                "max_size": cache_stats["frame_cache"]["max_size"],
+                "hits": cache_stats["frame_cache"]["hits"],
+                "misses": cache_stats["frame_cache"]["misses"],
+            },
+            "range_cache": {
+                "hit_rate_percent": cache_stats["range_cache"]["hit_rate_percent"],
+                "size": cache_stats["range_cache"]["size"],
+                "max_size": cache_stats["range_cache"]["max_size"],
+                "hits": cache_stats["range_cache"]["hits"],
+                "misses": cache_stats["range_cache"]["misses"],
+            },
+        },
+        "application": {
+            "name": settings.app_name,
+            "version": settings.app_version,
+            "environment": settings.environment,
+        },
+    }
