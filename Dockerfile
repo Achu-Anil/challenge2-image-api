@@ -9,7 +9,7 @@
 # ============================================================================
 # Stage 1: Builder - Install dependencies
 # ============================================================================
-FROM python:3.11-slim AS builder
+FROM python:3.14-slim AS builder
 
 LABEL maintainer="aiq-depth-frames-api"
 LABEL description="Multi-stage build for FastAPI Image Frames API"
@@ -38,7 +38,7 @@ RUN pip install --no-cache-dir poetry==1.7.1 && \
 # ============================================================================
 # Stage 2: Runtime - Lean production image
 # ============================================================================
-FROM python:3.11-slim AS runtime
+FROM python:3.14-slim AS runtime
 
 LABEL maintainer="aiq-depth-frames-api"
 LABEL description="Production image for FastAPI Image Frames API"
