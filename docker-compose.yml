@@ -23,9 +23,9 @@ services:
       dockerfile: Dockerfile
       target: runtime
 
-    image: challenge2-image-api:latest
+    image: aiq-depth-frames-api:latest
 
-    container_name: challenge2-api
+    container_name: aiq-depth-frames-api
 
     # Restart policy for production
     restart: unless-stopped
@@ -106,7 +106,7 @@ services:
 networks:
   api-network:
     driver: bridge
-    name: challenge2-network
+    name: aiq-depth-frames-network
 
 # ============================================================================
 # Volumes (for explicit volume management)
@@ -114,7 +114,7 @@ networks:
 volumes:
   api-data:
     driver: local
-    name: challenge2-data
+    name: aiq-depth-frames-data
 # ============================================================================
 # Additional Services (Optional - uncomment if needed)
 # ============================================================================
@@ -123,7 +123,7 @@ volumes:
 # ----------------------------------------------------------------------------
 #  postgres:
 #    image: postgres:15-alpine
-#    container_name: challenge2-postgres
+#    container_name: aiq-depth-frames-postgres
 #    restart: unless-stopped
 #
 #    environment:
@@ -150,7 +150,7 @@ volumes:
 #volumes:
 #  postgres-data:
 #    driver: local
-#    name: challenge2-postgres-data
+#    name: aiq-depth-frames-postgres-data
 #
 # Then update api service environment:
 #   DATABASE_URL: "postgresql+asyncpg://frames_user:${POSTGRES_PASSWORD:-changeme}@postgres:5432/frames_db"
@@ -160,7 +160,7 @@ volumes:
 # ----------------------------------------------------------------------------
 #  redis:
 #    image: redis:7-alpine
-#    container_name: challenge2-redis
+#    container_name: aiq-depth-frames-redis
 #    restart: unless-stopped
 #
 #    command: redis-server --appendonly yes
@@ -183,5 +183,5 @@ volumes:
 #volumes:
 #  redis-data:
 #    driver: local
-#    name: challenge2-redis-data
+#    name: aiq-depth-frames-redis-data
 # ----------------------------------------------------------------------------

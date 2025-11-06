@@ -3,15 +3,15 @@
 # Stage 1: Builder - Install dependencies
 # Stage 2: Runtime - Copy app and run uvicorn
 #
-# Build: docker build -t challenge2-image-api .
-# Run: docker run -p 8000:8000 -v $(pwd)/data:/app/data challenge2-image-api
+# Build: docker build -t aiq-depth-frames-api .
+# Run: docker run -p 8000:8000 -v $(pwd)/data:/app/data aiq-depth-frames-api
 
 # ============================================================================
 # Stage 1: Builder - Install dependencies
 # ============================================================================
 FROM python:3.11-slim AS builder
 
-LABEL maintainer="challenge2-image-api"
+LABEL maintainer="aiq-depth-frames-api"
 LABEL description="Multi-stage build for FastAPI Image Frames API"
 
 # Set working directory
@@ -40,7 +40,7 @@ RUN pip install --no-cache-dir poetry==1.7.1 && \
 # ============================================================================
 FROM python:3.11-slim AS runtime
 
-LABEL maintainer="challenge2-image-api"
+LABEL maintainer="aiq-depth-frames-api"
 LABEL description="Production image for FastAPI Image Frames API"
 
 # Set environment variables
@@ -90,10 +90,10 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-le
 # 
 # Run ingestion CLI:
 # docker run --rm -v $(pwd)/data:/app/data -v $(pwd)/sample.csv:/app/sample.csv \
-#   challenge2-image-api python -m app.cli.ingest /app/sample.csv
+#   aiq-depth-frames-api python -m app.cli.ingest /app/sample.csv
 #
 # Interactive shell:
-# docker run --rm -it -v $(pwd)/data:/app/data challenge2-image-api /bin/bash
+# docker run --rm -it -v $(pwd)/data:/app/data aiq-depth-frames-api /bin/bash
 #
 # Run tests:
-# docker run --rm challenge2-image-api pytest tests/
+# docker run --rm aiq-depth-frames-api pytest tests/

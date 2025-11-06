@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "challenge2-image-api"
+name = "aiq-depth-frames-api"
 version = "0.1.0"
 description = "Python Image Frames API - Process and serve depth-keyed grayscale image frames with custom colorization"
 authors = ["AIQ Backend Engineer <engineer@aiq.com>"]

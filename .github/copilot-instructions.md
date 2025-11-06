@@ -49,8 +49,8 @@ Process a CSV file where the first column `depth` references the depth value and
 
 ### Detailed Execution Steps
 
-1. **Project Bootstrap (30–45 min)**  
-   Create a new repository (e.g., `challenge2-image-api`). Scaffold a minimal FastAPI application with a health check endpoint. Use environment variables for configuration (database URL, chunk size). Document the directory structure and required dependencies. **Use Copilot** to generate the initial project skeleton, including `main.py`, `models.py` for SQLAlchemy, and a `requirements.txt` or `pyproject.toml`.
+1. **Project Bootstrap (30–45 min)**  
+   Create a new repository (e.g., `aiq-depth-frames-api`). Scaffold a minimal FastAPI application with a health check endpoint. Use environment variables for configuration (database URL, chunk size). Document the directory structure and required dependencies. **Use Copilot** to generate the initial project skeleton, including `main.py`, `models.py` for SQLAlchemy, and a `requirements.txt` or `pyproject.toml`.
 
 2. **Data Understanding & Ingestion Pipeline (45–60 min)**  
    Use pandas to inspect the CSV shape and column names. Write an ingestion script (`scripts/ingest.py`) that reads the CSV in chunks (e.g., 500 rows at a time) and processes each chunk into numpy arrays. Convert each row to a 1×200 uint8 array, resize to 1×150 via bilinear interpolation (using Pillow or cv2), apply the colour map LUT, encode to PNG bytes with Pillow, and upsert into the `frames` table (`depth` as primary key). **Use Copilot** to scaffold the ingestion function, but review its implementation to ensure vectorisation and error handling.
