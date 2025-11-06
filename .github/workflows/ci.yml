@@ -100,11 +100,11 @@ jobs:
 
       - name: Check code formatting with Black
         run: |
-          poetry run black --check app/ tests/
+          poetry run black --check app/ tests/ scripts/
 
       - name: Lint with Ruff
         run: |
-          poetry run ruff check app/ tests/
+          poetry run ruff check app/ tests/ scripts/
 
       - name: Type check with mypy
         run: |
