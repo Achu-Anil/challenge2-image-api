@@ -231,18 +231,18 @@ class TestCacheDecorators:
             return f"value_{depth}"
 
         # First call
-        result1 = await get_value(100.0)
+        await get_value(100.0)
         assert call_count == 1
 
         # Second call immediately - cache hit
-        result2 = await get_value(100.0)
+        await get_value(100.0)
         assert call_count == 1
 
         # Wait for expiration
         await asyncio.sleep(0.15)
 
         # Third call after expiration - cache miss
-        result3 = await get_value(100.0)
+        await get_value(100.0)
         assert call_count == 2
 
     def test_get_cache_stats(self):

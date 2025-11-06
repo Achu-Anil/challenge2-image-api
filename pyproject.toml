@@ -56,6 +56,10 @@ select = [
 ignore = [
     "E501",  # line too long, handled by black
     "B008",  # do not perform function calls in argument defaults
+    "E402",  # module level import not at top of file (needed for app setup)
+    "C901",  # function is too complex (acceptable in some cases)
+    "B904",  # raise from within except (acceptable in some cases)
+    "E722",  # bare except (acceptable in scripts)
 ]
 
 [tool.mypy]

@@ -10,7 +10,6 @@ Demonstrates the performance characteristics of the image processing pipeline:
 Run with: python -m scripts.benchmark
 """
 
-import asyncio
 import time
 from pathlib import Path
 
@@ -40,7 +39,7 @@ def benchmark_lut_generation():
     start = time.perf_counter()
 
     for _ in range(iterations):
-        lut = make_colormap_lut()
+        make_colormap_lut()
 
     elapsed = time.perf_counter() - start
     avg_time = (elapsed / iterations) * 1000
@@ -65,12 +64,12 @@ def benchmark_lut_application():
     start = time.perf_counter()
 
     for _ in range(iterations):
-        rgb = apply_lut(gray, lut)
+        apply_lut(gray, lut)
 
     elapsed = time.perf_counter() - start
     avg_time = (elapsed / iterations) * 1000
 
-    print(f"Image size:     1×200 pixels")
+    print("Image size:     1×200 pixels")
     print(f"Iterations:     {iterations}")
     print(f"Total time:     {elapsed:.4f} seconds")
     print(f"Average time:   {avg_time:.6f} ms")
@@ -91,12 +90,12 @@ def benchmark_resize():
     start = time.perf_counter()
 
     for _ in range(iterations):
-        resized = resize_gray_width(gray, new_width=150)
+        resize_gray_width(gray, new_width=150)
 
     elapsed = time.perf_counter() - start
     avg_time = (elapsed / iterations) * 1000
 
-    print(f"Single row (1×200 → 1×150):")
+    print("Single row (1×200 → 1×150):")
     print(f"  Iterations:     {iterations}")
     print(f"  Average time:   {avg_time:.4f} ms")
     print(f"  Operations/sec: {iterations / elapsed:.0f}")
@@ -109,7 +108,7 @@ def benchmark_resize():
     start = time.perf_counter()
 
     for _ in range(iterations_batch):
-        resized_batch = resize_gray_width(gray_batch, new_width=150)
+        resize_gray_width(gray_batch, new_width=150)
 
     elapsed_batch = time.perf_counter() - start
     avg_time_batch = (elapsed_batch / (iterations_batch * batch_size)) * 1000
@@ -144,7 +143,7 @@ def benchmark_png_encoding():
     png_bytes = encode_to_png(rgb)
     png_size = len(png_bytes)
 
-    print(f"Image size:     1×150×3 (RGB)")
+    print("Image size:     1×150×3 (RGB)")
     print(f"Iterations:     {iterations}")
     print(f"Average time:   {avg_time:.4f} ms")
     print(f"PNG size:       ~{png_size} bytes")
@@ -169,11 +168,11 @@ def benchmark_full_pipeline():
     elapsed = time.perf_counter() - start
     avg_time = (elapsed / iterations) * 1000
 
-    print(f"Steps: Validate → Resize → Colormap → Encode")
+    print("Steps: Validate → Resize → Colormap → Encode")
     print(f"Iterations:     {iterations}")
     print(f"Average time:   {avg_time:.4f} ms per row")
     print(f"Rows/sec:       {iterations / elapsed:.0f}")
-    print(f"\nEstimated throughput for 100K rows:")
+    print("\nEstimated throughput for 100K rows:")
     estimated_time = (100000 / (iterations / elapsed)) / 60
     print(f"  Time: {estimated_time:.1f} minutes")
     print("✅ RESULT: Ready for large-scale batch processing!")
@@ -213,7 +212,7 @@ def benchmark_csv_reading():
         start = time.perf_counter()
         total_chunks = 0
 
-        for chunk in pd.read_csv(csv_path, chunksize=chunk_size):
+        for _chunk in pd.read_csv(csv_path, chunksize=chunk_size):
             total_chunks += 1
 
         elapsed = time.perf_counter() - start

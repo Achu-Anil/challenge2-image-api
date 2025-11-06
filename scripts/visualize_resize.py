@@ -9,7 +9,7 @@ Creates comparison images showing:
 """
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 from app.processing.image import resize_gray_width
 
@@ -60,7 +60,7 @@ def create_resize_comparison():
     comparison = Image.new("RGB", (total_width, total_height), color="white")
 
     y_offset = spacing
-    for pattern, label in zip(patterns, labels):
+    for pattern, _label in zip(patterns, labels, strict=False):
         # Original (200 width)
         original_img = Image.fromarray(pattern, mode="L")
         comparison.paste(original_img, (spacing, y_offset))
@@ -77,7 +77,7 @@ def create_resize_comparison():
     comparison.save(filename)
     print(f"✅ Saved: {filename}")
     print(f"   Size: {comparison.size}")
-    print(f"   Shows: Original (200px) vs Resized (150px)")
+    print("   Shows: Original (200px) vs Resized (150px)")
 
 
 def create_resampling_methods_comparison():
@@ -110,7 +110,7 @@ def create_resampling_methods_comparison():
     comparison = Image.new("RGB", (total_width, total_height), color="white")
 
     x_offset = spacing
-    for resample_method, label in methods:
+    for resample_method, _label in methods:
         # Resize with this method
         resized = resize_gray_width(pattern, new_width=150, resample=resample_method)
 
@@ -125,7 +125,7 @@ def create_resampling_methods_comparison():
     comparison.save(filename)
     print(f"✅ Saved: {filename}")
     print(f"   Size: {comparison.size}")
-    print(f"   Compares: NEAREST, BILINEAR, BICUBIC, LANCZOS")
+    print("   Compares: NEAREST, BILINEAR, BICUBIC, LANCZOS")
 
 
 def create_gradient_quality_test():
@@ -171,10 +171,10 @@ def create_gradient_quality_test():
     comparison = Image.new("RGB", (total_width, total_height), color="white")
 
     y_offset = spacing
-    for grad_label, grad_data in gradients:
+    for _grad_label, grad_data in gradients:
         x_offset = spacing
 
-        for method_label, resample_method in methods:
+        for _method_label, resample_method in methods:
             if resample_method is None:
                 # Original
                 img = Image.fromarray(grad_data, mode="L")
@@ -194,7 +194,7 @@ def create_gradient_quality_test():
     comparison.save(filename)
     print(f"✅ Saved: {filename}")
     print(f"   Size: {comparison.size}")
-    print(f"   Shows: Horizontal, Vertical, Diagonal gradients")
+    print("   Shows: Horizontal, Vertical, Diagonal gradients")
 
 
 def verify_resize_properties():

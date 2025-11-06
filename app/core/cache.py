@@ -16,10 +16,10 @@ import hashlib
 import json
 import time
 from collections import OrderedDict
-from functools import lru_cache, wraps
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from functools import wraps
+from typing import Any, Callable, Dict, Optional
 
-from app.core import get_logger
+from app.core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -337,7 +337,7 @@ def cache_range(ttl_seconds: float = 60) -> Callable:
             cached_result = _range_cache.get(cache_key)
             if cached_result is not None:
                 logger.debug(
-                    f"Cache HIT for range query",
+                    "Cache HIT for range query",
                     extra={
                         "depth_min": depth_min,
                         "depth_max": depth_max,
@@ -349,7 +349,7 @@ def cache_range(ttl_seconds: float = 60) -> Callable:
 
             # Cache miss
             logger.debug(
-                f"Cache MISS for range query",
+                "Cache MISS for range query",
                 extra={
                     "depth_min": depth_min,
                     "depth_max": depth_max,

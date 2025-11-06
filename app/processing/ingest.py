@@ -10,7 +10,6 @@ This module handles:
 from pathlib import Path
 
 import pandas as pd
-from sqlalchemy import select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -299,7 +298,7 @@ async def ingest_csv(
     async with get_db_context() as db:
         for chunk_df in read_csv_chunks(csv_path, chunk_size):
             chunk_count += 1
-            chunk_start = time.time()
+            time.time()
 
             # Process chunk to frames
             frames = await process_chunk_to_frames(

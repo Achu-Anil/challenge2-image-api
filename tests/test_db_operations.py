@@ -12,7 +12,6 @@ Tests cover:
 
 import time
 
-import numpy as np
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 

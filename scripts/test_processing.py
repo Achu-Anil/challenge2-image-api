@@ -74,7 +74,7 @@ def test_colormap_application():
     # Apply colormap
     rgb = apply_colormap(gray)
     print(f"RGB output shape: {rgb.shape}")
-    print(f"\nRGB values:")
+    print("\nRGB values:")
     for i, val in enumerate(gray[0]):
         print(f"  Gray {val:3d} → RGB {rgb[0, i]}")
 
@@ -147,7 +147,7 @@ def create_test_csv(path: Path = Path("test_frames.csv"), num_rows: int = 10):
 
 async def test_csv_exploration(csv_path: Path):
     """Test CSV exploration function."""
-    print(f"\n=== Testing CSV Exploration ===")
+    print("\n=== Testing CSV Exploration ===")
 
     from app.processing.ingest import explore_csv
 

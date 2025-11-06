@@ -13,7 +13,6 @@ import pytest
 from PIL import Image
 
 from app.processing.image import (
-    apply_colormap,
     apply_lut,
     encode_to_png,
     make_colormap_lut,

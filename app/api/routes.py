@@ -20,7 +20,6 @@ from app.api.models import (
     FrameListMetadata,
     FrameListResponse,
     FrameResponse,
-    FramesQueryParams,
     ReloadRequest,
     ReloadResponse,
 )
@@ -79,22 +78,22 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> dict:
     summary="Get frames by depth range",
     description="""
     Retrieve image frames within a specified depth range.
-    
+
     **Filtering:**
     - Use `depth_min` and/or `depth_max` to filter by depth range
     - Both parameters are inclusive and optional
     - If neither is provided, returns all frames (subject to limit)
-    
+
     **Pagination:**
     - `limit`: Maximum frames to return (default: 100, max: 1000)
     - `offset`: Number of frames to skip (default: 0)
     - Use `metadata.has_more` to check if more results are available
-    
+
     **Response:**
     - Each frame includes depth, dimensions, and base64-encoded PNG image
     - Use `base64.b64decode()` to convert image_png_base64 to raw PNG bytes
     - Metadata includes count, total, depth range, and pagination info
-    
+
     **Example queries:**
     - All frames: `GET /frames`
     - Specific range: `GET /frames?depth_min=100&depth_max=500`
@@ -265,25 +264,25 @@ async def get_frames(
     summary="Reload frames from CSV (Admin only)",
     description="""
     Trigger re-ingestion of frames from CSV file.
-    
+
     **Authentication:**
     - Requires `X-Admin-Token` header matching configured admin token
     - Returns 401 Unauthorized if token is missing or invalid
-    
+
     **Parameters:**
     - `csv_path`: Optional path to CSV file (uses default if omitted)
     - `chunk_size`: Optional batch size for processing
     - `clear_existing`: If true, deletes all frames before ingesting
-    
+
     **Behavior:**
     - By default, performs idempotent upsert (safe to re-run)
     - If `clear_existing=true`, truncates frames table first
     - Runs ingestion synchronously (blocks until complete)
-    
+
     **Response:**
     - Status: "success", "failed", or "partial"
     - Includes metrics: rows processed, frames stored, duration
-    
+
     **Use cases:**
     - Reload data after CSV updates
     - Re-process with different parameters
@@ -436,7 +435,7 @@ async def reload_frames(
     summary="Get cache statistics",
     description="""
     Returns performance statistics for the frame and range caches.
-    
+
     Useful for monitoring cache effectiveness and tuning cache parameters.
     Statistics include hit rates, evictions, and current cache sizes.
     """,
@@ -506,7 +505,7 @@ async def get_cache_statistics():
     summary="Clear all caches",
     description="""
     Clears all cached data from both frame and range caches.
-    
+
     Requires admin authentication via X-Admin-Token header.
     Useful after POST /frames/reload to ensure fresh data is served.
     """,
@@ -586,7 +585,7 @@ async def clear_caches(
     - Database statistics (total frames, depth range)
     - Cache performance metrics
     - API request statistics
-    
+
     Useful for monitoring, alerting, and capacity planning.
     Compatible with Prometheus scraping format.
     """,

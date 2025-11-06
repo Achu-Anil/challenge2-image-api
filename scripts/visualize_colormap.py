@@ -44,7 +44,7 @@ def create_gradient_visualization(output_path: Path = Path("colormap_gradient.pn
     # Add color stop markers
     draw = ImageDraw.Draw(img)
 
-    for stop_idx, stop_color in COLOR_STOPS:
+    for stop_idx, _stop_color in COLOR_STOPS:
         # Scale position
         x = int(stop_idx * 4)
 
@@ -151,8 +151,8 @@ def create_sample_image(output_path: Path = Path("colormap_sample.png")):
     img.save(output_path)
     print(f"✅ Saved sample image: {output_path}")
     print(f"   Size: {img.size}")
-    print(f"   Left half: Vertical gradient (dark→light)")
-    print(f"   Right half: Horizontal gradient (dark→light)")
+    print("   Left half: Vertical gradient (dark→light)")
+    print("   Right half: Horizontal gradient (dark→light)")
 
     return output_path
 
@@ -186,8 +186,8 @@ def create_comparison_strip(output_path: Path = Path("colormap_comparison.png"))
 
     img.save(output_path)
     print(f"✅ Saved comparison strip: {output_path}")
-    print(f"   Top: Original grayscale")
-    print(f"   Bottom: Colorized with LUT")
+    print("   Top: Original grayscale")
+    print("   Bottom: Colorized with LUT")
 
     return output_path
 
@@ -203,7 +203,7 @@ def verify_lut_properties():
     print(f"Shape: {lut.shape}")
     print(f"Dtype: {lut.dtype}")
     print(f"Memory: {lut.nbytes} bytes")
-    print(f"\nColor Stops:")
+    print("\nColor Stops:")
 
     for idx, expected_rgb in COLOR_STOPS:
         actual_rgb = tuple(lut[idx])
@@ -211,7 +211,7 @@ def verify_lut_properties():
         print(f"  {match} Index {idx:3d}: RGB{actual_rgb} (expected {expected_rgb})")
 
     # Check some interpolated values
-    print(f"\nSample Interpolated Values:")
+    print("\nSample Interpolated Values:")
     for idx in [32, 96, 160, 224]:
         rgb = tuple(lut[idx])
         print(f"  Index {idx:3d}: RGB{rgb}")

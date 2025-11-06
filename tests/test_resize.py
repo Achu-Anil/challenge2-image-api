@@ -214,7 +214,6 @@ class TestPerformance:
         size_after = sys.getsizeof(resized)
 
         # Output should be proportionally smaller
-        expected_ratio = 150 / 200
         actual_ratio = size_after / size_before
 
         # Allow some overhead for array object

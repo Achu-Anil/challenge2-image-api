@@ -18,7 +18,7 @@ Examples:
     # Basic ingestion with colored images
     python -m scripts.ingest data/frames.csv
 
-    # Smaller chunks for memory-constrained environments  
+    # Smaller chunks for memory-constrained environments
     python -m scripts.ingest data/frames.csv --chunk-size 100
 
     # Store grayscale only (faster, smaller DB)
@@ -36,7 +36,6 @@ import asyncio
 import sys
 import time
 from pathlib import Path
-from typing import Optional
 
 from app.core import get_logger, settings, setup_logging
 from app.db import get_db_context
@@ -246,7 +245,7 @@ Examples:
 
 Exit Codes:
   0 = Success
-  1 = File or configuration error  
+  1 = File or configuration error
   2 = Data validation error
   3 = Database or unexpected error
         """,
@@ -373,7 +372,7 @@ Exit Codes:
         print(f"Frames Stored:     {result['frames_stored']:,}")
         print(f"DB Count:          {result['db_count']:,}")
         print(f"Validation:        {'✓ PASSED' if result['validation_passed'] else '✗ FAILED'}")
-        print(f"\nPerformance Metrics:")
+        print("\nPerformance Metrics:")
         print(f"  Total Duration:  {result['duration_seconds']:.2f} seconds")
         print(f"  Throughput:      {result['throughput_fps']:.1f} frames/sec")
         print(f"  Throughput:      {result['throughput_mbps']:.2f} MB/sec")
@@ -386,7 +385,7 @@ Exit Codes:
                 f"{result['max_depth']:.4f}"
             )
 
-        print(f"\nTiming Breakdown:")
+        print("\nTiming Breakdown:")
         print(f"  Explore CSV:     {result['timings']['explore_seconds']:.3f}s")
         print(f"  Process Chunks:  {result['timings']['process_seconds']:.3f}s")
         print(f"  Validate DB:     {result['timings']['validate_seconds']:.3f}s")

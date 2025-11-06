@@ -12,14 +12,13 @@ Features include:
 
 Architecture:
     CSV → Pandas → NumPy → Colormap → PNG → SQLite → FastAPI → Your Browser
-    
+
     It's like a data pipeline, but with more colors and fewer tears.
 """
 
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-import orjson
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 

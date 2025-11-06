@@ -8,7 +8,7 @@ in the database.
 CSV Format:
     depth,col1,col2,...,col200
     100.5,45,67,89,...,234
-    
+
 Where:
     - First column: depth (float) - unique identifier
     - Next 200 columns: pixel intensity values (0-255)
@@ -26,10 +26,10 @@ Processing Pipeline:
 Usage:
     # From Docker
     docker compose exec api python -m app.cli.ingest /app/data/yourfile.csv
-    
+
     # From local environment
     poetry run python -m app.cli.ingest data/yourfile.csv --chunk-size 1000
-    
+
     # With custom chunk size
     python -m app.cli.ingest data/large_file.csv --chunk-size 1000
 """
@@ -39,7 +39,6 @@ import asyncio
 import sys
 import time
 from pathlib import Path
-from typing import Optional
 
 import pandas as pd
 
@@ -234,10 +233,10 @@ def main() -> None:
 Examples:
     # Ingest with default chunk size (500)
     python -m app.cli.ingest data/frames.csv
-    
+
     # Ingest with custom chunk size
     python -m app.cli.ingest data/large_file.csv --chunk-size 1000
-    
+
     # From Docker container
     docker compose exec api python -m app.cli.ingest /app/data/frames.csv
         """,
