@@ -14,12 +14,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 from app.core import setup_logging
-from app.processing.image import (
-    COLORMAP_LUT,
-    COLOR_STOPS,
-    apply_lut,
-    make_colormap_lut,
-)
+from app.processing.image import COLOR_STOPS, COLORMAP_LUT, apply_lut, make_colormap_lut
 
 
 def create_gradient_visualization(output_path: Path = Path("colormap_gradient.png")):

@@ -19,11 +19,11 @@ import pandas as pd
 
 from app.core import get_logger, setup_logging
 from app.processing.image import (
-    make_colormap_lut,
     apply_lut,
-    resize_gray_width,
     encode_to_png,
+    make_colormap_lut,
     process_row_to_png,
+    resize_gray_width,
 )
 
 setup_logging("INFO")

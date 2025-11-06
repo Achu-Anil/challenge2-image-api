@@ -7,7 +7,7 @@ This module defines the database schema using SQLAlchemy 2.0 async ORM.
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import LargeBinary, Float, Integer, DateTime, func
+from sqlalchemy import DateTime, Float, Integer, LargeBinary, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 

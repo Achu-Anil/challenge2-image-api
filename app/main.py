@@ -116,15 +116,17 @@ app = FastAPI(
     openapi_url="/openapi.json",  # OpenAPI schema (for code generation, etc.)
 )
 
+from datetime import datetime, timezone
+
 # ============================================================================
 # Exception Handlers
 # ============================================================================
 from fastapi import HTTPException, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+
 from app.api.models import ErrorResponse
 from app.core import get_request_id
-from datetime import datetime, timezone
 
 
 @app.exception_handler(HTTPException)

@@ -8,13 +8,14 @@ Tests for:
 """
 
 import base64
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import delete
 
-from app.main import app
 from app.db import Frame, get_db_context
 from app.db.operations import upsert_frame
+from app.main import app
 
 # Create test client
 client = TestClient(app)

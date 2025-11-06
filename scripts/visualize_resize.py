@@ -10,6 +10,7 @@ Creates comparison images showing:
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+
 from app.processing.image import resize_gray_width
 
 

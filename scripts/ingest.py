@@ -38,14 +38,10 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from app.core import setup_logging, settings, get_logger
-from app.processing.ingest import (
-    explore_csv,
-    read_csv_chunks,
-    process_chunk_to_frames,
-)
+from app.core import get_logger, settings, setup_logging
 from app.db import get_db_context
-from app.db.operations import upsert_frames_batch, count_frames, get_depth_range
+from app.db.operations import count_frames, get_depth_range, upsert_frames_batch
+from app.processing.ingest import explore_csv, process_chunk_to_frames, read_csv_chunks
 
 logger = get_logger(__name__)
 

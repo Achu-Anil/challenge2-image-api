@@ -7,11 +7,11 @@ management, error handling, and performance optimizations.
 
 from typing import Optional, Sequence
 
-from sqlalchemy import select, func, and_
+from sqlalchemy import and_, func, select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core import get_logger, cache_frame, cache_range
+from app.core import cache_frame, cache_range, get_logger
 from app.db.models import Frame
 
 logger = get_logger(__name__)

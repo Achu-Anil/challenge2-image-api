@@ -12,25 +12,21 @@ Endpoints:
 import time
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Header, Query, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.models import (
-    FrameResponse,
-    FrameListResponse,
+    ErrorResponse,
     FrameListMetadata,
+    FrameListResponse,
+    FrameResponse,
     FramesQueryParams,
     ReloadRequest,
     ReloadResponse,
-    ErrorResponse,
 )
-from app.core import get_logger, settings, get_cache_stats, clear_all_caches
-from app.db import get_db, Frame
-from app.db.operations import (
-    get_frames_by_depth_range,
-    count_frames,
-    get_depth_range,
-)
+from app.core import clear_all_caches, get_cache_stats, get_logger, settings
+from app.db import Frame, get_db
+from app.db.operations import count_frames, get_depth_range, get_frames_by_depth_range
 
 logger = get_logger(__name__)
 

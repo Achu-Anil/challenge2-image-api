@@ -13,11 +13,11 @@ import pytest
 from PIL import Image
 
 from app.processing.image import (
-    make_colormap_lut,
-    apply_lut,
     apply_colormap,
-    resize_grayscale_row,
+    apply_lut,
     encode_to_png,
+    make_colormap_lut,
+    resize_grayscale_row,
 )
 
 

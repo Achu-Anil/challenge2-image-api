@@ -11,6 +11,7 @@ Tests cover:
 """
 
 import time
+
 import numpy as np
 import pytest
 from PIL import Image

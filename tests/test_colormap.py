@@ -14,8 +14,8 @@ import numpy as np
 import pytest
 
 from app.processing.image import (
-    COLORMAP_LUT,
     COLOR_STOPS,
+    COLORMAP_LUT,
     apply_colormap,
     apply_lut,
     make_colormap_lut,

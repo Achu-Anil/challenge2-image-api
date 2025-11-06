@@ -8,9 +8,9 @@ This module defines all data models used in the API layer, including:
 """
 
 import base64
-from typing import Optional, List
+from typing import List, Optional
 
-from pydantic import BaseModel, Field, field_validator, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class FramesQueryParams(BaseModel):
